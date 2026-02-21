@@ -1,51 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sportsclusive</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportsclusive | Global Sports</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
- 
 
-<header>
-  <h1>Sportsclusive</h1>
-  <p>Football & Cricket Articles</p>
-</header>
-  <header>
-  <h1>SPORTSCLUSIVE</h1>
-</header>
-  <section class="auto-sports-section">
-  
-  <div class="widget-container">
-    <h3 class="widget-title">🏏 Live Cricket Center</h3>
-    <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
-  </div>
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">● T20 WORLD CUP: PAK vs NZ LIVE NOW</div>
+            <div class="ticker-item">● MESSI STARTS FOR INTER MIAMI VS LAFC</div>
+            <div class="ticker-item">● PREMIER LEAGUE: ARSENAL LEAD ASTON VILLA 1-0</div>
+        </div>
+    </div>
 
-  <div class="widget-container">
-    <h3 class="widget-title">⚽ Soccer Match Day</h3>
-    <div id="scoreaxis-widget-30f1d" data-widget="scoreaxis-live-list" data-leagues="8,564,7,25,9" data-theme="dark"></div>
-    <script src="https://www.scoreaxis.com/widget/common.js"></script>
-  </div>
+    <header>
+        <h1>SPORTSCLUSIVE</h1>
+    </header>
 
-</section>
+    <div class="espn-container">
+        
+        <aside class="left-col">
+            <div class="sidebar-box">
+                <h3 class="side-title">Favorites</h3>
+                <ul class="side-links">
+                    <li>🏏 T20 World Cup</li>
+                    <li>⚽ Inter Miami</li>
+                    <li>⚽ Premier League</li>
+                    <li>🏏 Indian Team</li>
+                </ul>
+            </div>
+        </aside>
 
-<main>
-<div class="article-link">
-  <div class="category">FOOTBALL</div>
-  <a href="articles/test.html" target="_blank">
-    test
-  </a>
-</div>
-  <div class="article-link">
-    <div class="category">FOOTBALL</div>
-    <a href="articles/example.html" target="_blank">
-      The Greatest Football Comeback Ever
-    </a>
-  </div>
+        <main class="main-col">
+            <h2 class="section-title">Match Center</h2>
+            <div class="match-card main-widget">
+                <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
+            </div>
 
-  <!-- ADD NEW ARTICLE LINKS HERE -->
+            <div class="match-card main-widget">
+                <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
+                <script src="https://www.scoreaxis.com/widget/common.js"></script>
+            </div>
+        </main>
 
-</main>
+        <aside class="right-col">
+            <div class="sidebar-box">
+                <h3 class="side-title">Star of the Day</h3>
+                <div class="potm-mini">
+                    <div class="potm-badge">POTM</div>
+                    <h4>Lionel Messi</h4>
+                    <p>Dominating the 2026 MLS opener.</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-box" style="margin-top: 20px;">
+                <h3 class="side-title">Top Headlines</h3>
+                <ul class="news-list">
+                    <li>Hardik Pandya fit for Super 8s</li>
+                    <li>Mbappe transfer rumors heat up</li>
+                    <li>Kohli 2.0: The T20 Masterclass</li>
+                </ul>
+            </div>
+        </aside>
+
+    </div>
 
 </body>
 </html>
