@@ -3,88 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportsclusive | Global Sports Engine</title>
+    <title>Sportsclusive | World Sports Hub</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo">SPORTSCLUSIVE</a>
-        <input type="text" id="mainSearch" class="search-bar" placeholder="Search Players, Teams, or Trending News...">
-        <div style="font-weight: 900; color: #ff002b; font-size: 0.8rem;">● LIVE HUB</div>
-    </header>
+<header>
+    <a href="#" class="logo">SPORTSCLUSIVE</a>
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search Players, Teams, or News...">
+    <div style="font-weight: bold; font-size: 0.8rem; color: var(--cb-green);">2026 GLOBAL FEED</div>
+</header>
 
-    <div class="score-carousel">
-        <div class="capsule">
-            <div style="font-size:0.6rem; color:#ff002b;">IPL 2026</div>
-            <div style="font-weight:700;">RCB <span style="float:right">192/3</span></div>
-            <div style="font-weight:700;">CSK <span style="float:right">45/1</span></div>
-        </div>
-        </div>
-
-    <div class="master-grid">
-        <aside class="left-col">
-            <h3>STANDINGS</h3>
-            <div id="scoreaxis-widget-standings" data-widget="scoreaxis-league-table" data-league="8" data-theme="dark"></div>
-            <div style="margin-top:20px" id="scoreaxis-widget-standings-2" data-widget="scoreaxis-league-table" data-league="1530" data-theme="dark"></div>
-        </aside>
-
-        <main class="center-col">
-            <h3>TRENDING NOW</h3>
-            <div id="trending-hero" class="trending-hero"></div>
-
-            <h3>WORLD MATCH CENTER</h3>
-            <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
-            
-            <h3>ALL SPORTS NEWS</h3>
-            <div id="news-list"></div>
-        </main>
-
-        <aside class="right-col">
-            <h3>CRICKET WORLD</h3>
-            <div style="background: #111; padding: 10px; border-radius: 8px;">
-                <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
-            </div>
-            <h3>TOP PLAYERS</h3>
-            <div style="background: #111; padding: 15px; border-radius: 8px; font-size: 0.9rem; line-height: 2;">
-                1. 🇦🇷 Lionel Messi<br>2. 🇮🇳 Virat Kohli<br>3. 🇳🇴 Erling Haaland<br>4. 🇫🇷 Kylian Mbappé
-            </div>
-        </aside>
+<div class="score-strip">
+    <div class="score-card">
+        <span class="live-dot">● LIVE</span>
+        <div style="margin-top:5px"><b>IND</b> 345/6 (85.2)</div>
+        <div><b>AUS</b> 210/10</div>
+    </div>
+    <div class="score-card">
+        <span style="color:#888; font-size:0.7rem;">UPCOMING</span>
+        <div style="margin-top:5px"><b>RMAD</b> vs <b>BARC</b></div>
+        <div style="color:var(--cb-green)">Starts in 2h 15m</div>
+    </div>
     </div>
 
-    <script src="https://www.scoreaxis.com/widget/common.js"></script>
-    <script>
-        async function fetchContent() {
-            const res = await fetch(`https://api.github.com/repos/mayukh18052012-cell/sportsclusive/contents/_posts`);
-            const files = await res.json();
-            const newsList = document.getElementById('news-list');
-            const hero = document.getElementById('trending-hero');
+<div class="main-container">
+    <main>
+        <h2 class="section-title">TRENDING NOW</h2>
+        <div id="news-feed">
+            <p style="color:#666;">Synchronizing global sports data...</p>
+        </div>
 
-            for (let [i, file] of files.reverse().entries()) {
-                if(file.name === ".gitkeep") continue;
-                const pRes = await fetch(file.download_url);
-                const text = await pRes.text();
-                const img = text.match(/image: "(.*)"/)?.[1] || '';
-                const title = text.match(/title: "(.*)"/)?.[1] || 'News Update';
+        <h2 class="section-title" style="margin-top:40px;">WORLD MATCH CENTER</h2>
+        <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
+    </main>
 
-                if(i < 2) {
-                    hero.innerHTML += `<div class="trend-card"><img src="${img}"><div class="info"><h4>${title.toUpperCase()}</h4></div></div>`;
-                }
-                newsList.innerHTML += `<div style="background:#111; border:1px solid #222; padding:15px; border-radius:4px; margin-bottom:10px; display:flex; gap:15px; align-items:center;">
-                    <img src="${img}" style="width:80px; height:60px; object-fit:cover;">
-                    <div><div style="font-weight:700;">${title}</div><a href="${file.html_url}" style="font-size:0.8rem; color:#888;">Read Story →</a></div>
-                </div>`;
-            }
-        }
-        fetchContent();
+    <aside>
+        <h2 class="section-title">POINT TABLE</h2>
+        <div id="scoreaxis-widget-standings" data-widget="scoreaxis-league-table" data-league="8" data-theme="dark"></div>
 
-        document.getElementById('mainSearch').addEventListener('keyup', (e) => {
-            const q = e.target.value.toLowerCase();
-            document.querySelectorAll('.trend-card, .news-list > div').forEach(el => {
-                el.style.display = el.innerText.toLowerCase().includes(q) ? '' : 'none';
+        <h2 class="section-title" style="margin-top:30px;">TOP PERFORMERS</h2>
+        <div style="background:var(--cb-card); padding:15px; border-radius:6px; font-size:0.9rem;">
+            <div style="padding:8px 0; border-bottom:1px solid #333;">1. 🇦🇷 Lionel Messi <span style="float:right; color:var(--cb-green)">8.9</span></div>
+            <div style="padding:8px 0; border-bottom:1px solid #333;">2. 🇳🇴 Erling Haaland <span style="float:right; color:var(--cb-green)">8.5</span></div>
+            <div style="padding:8px 0; border-bottom:1px solid #333;">3. 🇮🇳 Virat Kohli <span style="float:right; color:var(--cb-green)">9.2</span></div>
+            <div style="padding:8px 0;">4. 🇫🇷 Kylian Mbappé <span style="float:right; color:var(--cb-green)">8.1</span></div>
+        </div>
+    </aside>
+</div>
+
+<script src="https://www.scoreaxis.com/widget/common.js"></script>
+<script>
+    // AUTO-PILOT: Fetching Trending News from ESPN RSS
+    async function fetchGlobalNews() {
+        const feedUrl = encodeURIComponent('https://www.espn.com/espn/rss/news');
+        const api = `https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`;
+
+        try {
+            const res = await fetch(api);
+            const data = await res.json();
+            const container = document.getElementById('news-feed');
+            container.innerHTML = '';
+
+            data.items.slice(0, 12).forEach(item => {
+                const thumb = item.enclosure.link || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=200';
+                container.innerHTML += `
+                    <div class="news-card">
+                        <img src="${thumb}" alt="img">
+                        <div class="news-content">
+                            <div class="category-tag">Trending</div>
+                            <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+                            <div style="font-size:0.75rem; color:#888;">${item.pubDate}</div>
+                        </div>
+                    </div>`;
             });
+        } catch (e) { console.log("News offline"); }
+    }
+
+    // Search Logic
+    document.getElementById('searchBar').addEventListener('keyup', (e) => {
+        const val = e.target.value.toLowerCase();
+        document.querySelectorAll('.news-card').forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(val) ? 'flex' : 'none';
         });
-    </script>
+    });
+
+    fetchGlobalNews();
+</script>
 </body>
 </html>
