@@ -1,162 +1,73 @@
-/* --- GLOBAL STYLES --- */
-:root {
-  --bg-dark: #0b0f19;
-  --card-bg: #161b22;
-  --espn-red: #ff002b;
-  --text-main: #f0f6fc;
-  --text-dim: #8b949e;
-  --accent-blue: #58a6ff;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportsclusive | Global Sports</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
+</head>
+<body>
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  line-height: 1.6;
-}
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">● T20 WORLD CUP: PAK vs NZ LIVE NOW</div>
+            <div class="ticker-item">● MESSI STARTS FOR INTER MIAMI VS LAFC</div>
+            <div class="ticker-item">● PREMIER LEAGUE: ARSENAL LEAD ASTON VILLA 1-0</div>
+        </div>
+    </div>
 
-/* --- PREMIUM HEADER --- */
-header {
-  background: linear-gradient(180deg, rgba(255,0,43,0.15) 0%, rgba(11,15,25,1) 100%);
-  padding: 80px 20px 40px;
-  text-align: center;
-  border-bottom: 1px solid #30363d;
-}
+    <header>
+        <h1>SPORTSCLUSIVE</h1>
+    </header>
 
-header h1 {
-  font-size: 3rem;
-  font-weight: 900;
-  letter-spacing: -2px;
-  text-transform: uppercase;
-  margin: 0;
-  background: linear-gradient(to right, #fff, var(--espn-red));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+    <div class="espn-container">
+        
+        <aside class="left-col">
+            <div class="sidebar-box">
+                <h3 class="side-title">Favorites</h3>
+                <ul class="side-links">
+                    <li>🏏 T20 World Cup</li>
+                    <li>⚽ Inter Miami</li>
+                    <li>⚽ Premier League</li>
+                    <li>🏏 Indian Team</li>
+                </ul>
+            </div>
+        </aside>
 
-/* --- MAIN CONTAINER --- */
-main {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
+        <main class="main-col">
+            <h2 class="section-title">Match Center</h2>
+            <div class="match-card main-widget">
+                <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
+            </div>
 
-/* --- ARTICLE CARDS (The ESPN+ Look) --- */
-.article-link {
-  display: block;
-  background-color: var(--card-bg);
-  border: 1px solid #30363d;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 20px;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
+            <div class="match-card main-widget">
+                <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
+                <script src="https://www.scoreaxis.com/widget/common.js"></script>
+            </div>
+        </main>
 
-.article-link:hover {
-  transform: translateY(-4px);
-  border-color: var(--espn-red);
-  box-shadow: 0 10px 30px rgba(255, 0, 43, 0.1);
-}
+        <aside class="right-col">
+            <div class="sidebar-box">
+                <h3 class="side-title">Star of the Day</h3>
+                <div class="potm-mini">
+                    <div class="potm-badge">POTM</div>
+                    <h4>Lionel Messi</h4>
+                    <p>Dominating the 2026 MLS opener.</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-box" style="margin-top: 20px;">
+                <h3 class="side-title">Top Headlines</h3>
+                <ul class="news-list">
+                    <li>Hardik Pandya fit for Super 8s</li>
+                    <li>Mbappe transfer rumors heat up</li>
+                    <li>Kohli 2.0: The T20 Masterclass</li>
+                </ul>
+            </div>
+        </aside>
 
-.article-link h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.5rem;
-  color: var(--text-main);
-}
+    </div>
 
-.article-link .category {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--espn-red);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-/* --- ARTICLE CONTENT STYLING --- */
-.meta {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  border-left: 3px solid var(--espn-red);
-  padding-left: 15px;
-  margin-bottom: 30px;
-}
-
-.article-hero img {
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  transition: transform 0.5s ease;
-}
-
-.article-hero img:hover {
-  transform: scale(1.01);
-}
-
-.article-content {
-  font-size: 1.15rem;
-  color: #d1d5db;
-}
-
-/* --- BUTTONS & LINKS --- */
-a.back-btn {
-  display: inline-block;
-  margin-top: 40px;
-  color: var(--accent-blue);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-a.back-btn:hover {
-  text-decoration: underline;
-}
-
-/* --- FOOTER --- */
-footer {
-  text-align: center;
-  padding: 40px;
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  border-top: 1px solid #30363d;
-  margin-top: 60px;
-}
-/* --- AUTOMATIC WIDGET STYLING --- */
-.auto-sports-section {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 0 15px;
-}
-
-.widget-container {
-  background: #161b22; /* Matches your dark theme */
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 25px;
-  border: 1px solid #30363d;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.widget-title {
-  color: #ff002b; /* ESPN Red */
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  margin-bottom: 12px;
-  padding-left: 5px;
-  border-left: 3px solid #ff002b;
-}
-
-/* Ensure the automated widgets take up the full width */
-iframe, .scoreaxis-widget {
-  width: 100% !important;
-  border: none !important;
-  border-radius: 8px;
-}
-
+</body>
+</html>
