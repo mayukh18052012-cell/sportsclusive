@@ -1,82 +1,114 @@
-<input type="file" id="imageInput" accept="image/*">
-<img id="preview" style="max-width: 100%; display: none; margin: 10px 0; border: 1px solid #333;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sportsclusive | Secret Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #000; color: white; padding: 20px; font-family: 'Roboto', sans-serif; }
+        .editor-wrap { max-width: 800px; margin: auto; background: #111; padding: 40px; border-top: 4px solid #ff002b; }
+        input, textarea, select { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 4px; }
+        label { color: #888; font-size: 0.8rem; font-weight: bold; display: block; margin-top: 10px; }
+        button { background: #ff002b; color: white; border: none; padding: 20px; width: 100%; cursor: pointer; font-weight: 900; font-size: 1rem; }
+        #previewImg { max-width: 100%; height: auto; display: none; margin: 15px 0; border: 2px solid #333; }
+        .status-msg { margin-top: 20px; padding: 10px; display: none; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-<script>
-    const GITHUB_CONFIG = {
-        token: "YOUR_ACTUAL_TOKEN_HERE", // Keep this strictly in this private file
-        owner: "mayukh18052012-cell",
-        repo: "sportsclusive",
-        branch: "main" 
-    };
-
-    // Show image preview
-    document.getElementById('imageInput').onchange = function(e) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const img = document.getElementById('preview');
-            img.src = reader.result;
-            img.style.display = "block";
-        }
-        reader.readAsDataURL(e.target.files[0]);
-    };
-
-    async function sendToGithub() {
-        const title = document.getElementById('title').value;
-        const content = document.getElementById('body').value;
-        const imageFile = document.getElementById('imageInput').files[0];
-        const status = document.getElementById('status');
-
-        if(!title || !content || !imageFile) { alert("Missing title, content, or image!"); return; }
-
-        status.style.display = "block";
-        status.innerText = "Uploading Image and Article...";
-
-        const dateStr = new Date().toISOString().split('T')[0];
-        const slug = title.toLowerCase().replace(/ /g, '-');
+    <div class="editor-wrap">
+        <h2 style="font-family: 'Oswald'; font-style: italic;">ADMIN CONSOLE</h2>
         
-        try {
-            // 1. UPLOAD IMAGE FIRST
-            const imgReader = new FileReader();
-            imgReader.readAsArrayBuffer(imageFile);
-            imgReader.onload = async () => {
-                const imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgReader.result)));
-                const imgPath = `images/uploads/${dateStr}-${slug}.png`;
+        <label>ARTICLE TITLE</label>
+        <input type="text" id="title" placeholder="e.g. Messi Scores Tonight">
+        
+        <label>ADD PICTURE</label>
+        <input type="file" id="imageInput" accept="image/*">
+        <img id="previewImg" src="">
 
+        <label>CATEGORY</label>
+        <select id="category">
+            <option value="FOOTBALL">FOOTBALL</option>
+            <option value="CRICKET">CRICKET</option>
+        </select>
+
+        <label>STORY CONTENT</label>
+        <textarea id="body" rows="12" placeholder="Write the story here..."></textarea>
+        
+        <button id="publishBtn" onclick="sendToGithub()">PUBLISH TO SITE</button>
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <script>
+        // Preview image locally before upload
+        document.getElementById('imageInput').onchange = function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('previewImg');
+                img.src = reader.result;
+                img.style.display = "block";
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        const GITHUB_CONFIG = {
+            token: "YOUR_GITHUB_TOKEN_HERE", // PASTE YOUR TOKEN HERE
+            owner: "mayukh18052012-cell",
+            repo: "sportsclusive"
+        };
+
+        async function sendToGithub() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('body').value;
+            const imageFile = document.getElementById('imageInput').files[0];
+            const btn = document.getElementById('publishBtn');
+            const status = document.getElementById('status');
+
+            if(!title || !imageFile) return alert("Title and Picture are required!");
+
+            btn.disabled = true;
+            status.style.display = "block";
+            status.innerText = "Uploading Picture & Article...";
+
+            const slug = title.toLowerCase().replace(/ /g, '-');
+            const dateStr = new Date().toISOString().split('T')[0];
+            const imgPath = `images/uploads/${dateStr}-${slug}.png`;
+            const postPath = `_posts/${dateStr}-${slug}.md`;
+
+            try {
+                // 1. Upload Image
+                const imgBase64 = await toBase64(imageFile);
                 await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${imgPath}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
-                    body: JSON.stringify({
-                        message: `Upload image for ${title}`,
-                        content: imgBase64
-                    })
+                    body: JSON.stringify({ message: `Upload image`, content: imgBase64.split(',')[1] })
                 });
 
-                // 2. UPLOAD ARTICLE MARKDOWN
-                const postPath = `_posts/${dateStr}-${slug}.md`;
-                const postContent = `---
-title: "${title}"
-image: "/${imgPath}"
-date: "${dateStr}"
----
-${content}`;
-                const postBase64 = btoa(unescape(encodeURIComponent(postContent)));
+                // 2. Upload Article
+                const fileContent = `---\ntitle: "${title}"\nimage: "${imgPath}"\ndate: "${dateStr}"\n---\n${content}`;
+                const postBase64 = btoa(unescape(encodeURIComponent(fileContent)));
 
-                const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${postPath}`, {
+                await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${postPath}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
-                    body: JSON.stringify({
-                        message: `New Post: ${title}`,
-                        content: postBase64
-                    })
+                    body: JSON.stringify({ message: `New post`, content: postBase64 })
                 });
 
-                if(res.ok) {
-                    status.innerText = "SUCCESS! Article and Image are live.";
-                    status.style.background = "green";
-                }
-            };
-        } catch (err) {
-            status.innerText = "Upload failed. Check token permissions.";
+                status.innerText = "SUCCESS! Article is live.";
+                status.style.background = "green";
+            } catch (err) {
+                status.innerText = "Error uploading. Check your Token.";
+                status.style.background = "red";
+                btn.disabled = false;
+            }
         }
-    }
-</script>
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    </script>
+</body>
+</html>
