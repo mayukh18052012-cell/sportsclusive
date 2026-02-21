@@ -3,70 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportsclusive | Global Sports</title>
+    <title>Sportsclusive | Global Live</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <div class="ticker-item">● T20 WORLD CUP: PAK vs NZ LIVE NOW</div>
-            <div class="ticker-item">● MESSI STARTS FOR INTER MIAMI VS LAFC</div>
-            <div class="ticker-item">● PREMIER LEAGUE: ARSENAL LEAD ASTON VILLA 1-0</div>
-        </div>
-    </div>
 
     <header>
         <h1>SPORTSCLUSIVE</h1>
     </header>
 
-    <div class="espn-container">
-        
-        <aside class="left-col">
-            <div class="sidebar-box">
-                <h3 class="side-title">Favorites</h3>
-                <ul class="side-links">
-                    <li>🏏 T20 World Cup</li>
-                    <li>⚽ Inter Miami</li>
-                    <li>⚽ Premier League</li>
-                    <li>🏏 Indian Team</li>
-                </ul>
+    <div class="score-carousel">
+        <div class="carousel-track">
+            
+            <div class="capsule">
+                <div class="league-name">T20 WC</div>
+                <div class="match-row"><span>IND</span> <span class="score-val">184/4</span></div>
+                <div class="match-row"><span>PAK</span> <span class="score-val">120/2</span></div>
+                <div class="status live">LIVE</div>
             </div>
-        </aside>
 
-        <main class="main-col">
-            <h2 class="section-title">Match Center</h2>
-            <div class="match-card main-widget">
+            <div class="capsule">
+                <div class="league-name">MLS</div>
+                <div class="match-row"><span>MIA</span> <span class="score-val">2</span></div>
+                <div class="match-row"><span>LAFC</span> <span class="score-val">1</span></div>
+                <div class="status live">65'</div>
+            </div>
+
+            <div class="capsule">
+                <div class="league-name">PL</div>
+                <div class="match-row"><span>ARS</span> <span class="score-val">1</span></div>
+                <div class="match-row"><span>AVL</span> <span class="score-val">0</span></div>
+                <div class="status">FINAL</div>
+            </div>
+
+            <div class="capsule">
+                <div class="league-name">T20 WC</div>
+                <div class="match-row"><span>NZ</span> <span class="score-val">--</span></div>
+                <div class="match-row"><span>SA</span> <span class="score-val">--</span></div>
+                <div class="status">7:30 PM</div>
+            </div>
+
+            <div class="capsule">
+                <div class="league-name">LA LIGA</div>
+                <div class="match-row"><span>RMA</span> <span class="score-val">3</span></div>
+                <div class="match-row"><span>OSA</span> <span class="score-val">0</span></div>
+                <div class="status">FINAL</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="espn-grid">
+        <main class="main-content">
+            <h2 class="section-title">Global Match Centers</h2>
+            <div class="auto-card">
                 <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
             </div>
-
-            <div class="match-card main-widget">
+            <div class="auto-card">
                 <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
                 <script src="https://www.scoreaxis.com/widget/common.js"></script>
             </div>
         </main>
-
-        <aside class="right-col">
-            <div class="sidebar-box">
-                <h3 class="side-title">Star of the Day</h3>
-                <div class="potm-mini">
-                    <div class="potm-badge">POTM</div>
-                    <h4>Lionel Messi</h4>
-                    <p>Dominating the 2026 MLS opener.</p>
-                </div>
-            </div>
-            
-            <div class="sidebar-box" style="margin-top: 20px;">
-                <h3 class="side-title">Top Headlines</h3>
-                <ul class="news-list">
-                    <li>Hardik Pandya fit for Super 8s</li>
-                    <li>Mbappe transfer rumors heat up</li>
-                    <li>Kohli 2.0: The T20 Masterclass</li>
-                </ul>
-            </div>
-        </aside>
-
     </div>
 
 </body>
