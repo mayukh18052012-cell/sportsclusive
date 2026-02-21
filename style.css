@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0a0f1c;
+  color: #e5e7eb;
+}
+
+header {
+  background: linear-gradient(135deg,#16a34a,#2563eb);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+a {
+  color: #22c55e;
+  text-decoration: none;
+}
+
+.article-link {
+  background: #111827;
+  padding: 18px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+}
+
+.category {
+  font-size: 0.85rem;
+  color: #60a5fa;
+  margin-bottom: 6px;
+}

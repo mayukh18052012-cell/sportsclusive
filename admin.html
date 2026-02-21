@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sportsclusive Admin</title>
+  <style>
+    body { background:#111; color:#fff; font-family:Arial; padding:20px; }
+    input, textarea, select, button {
+      width:100%; padding:10px; margin-top:10px;
+    }
+    textarea { height:200px; }
+    pre { background:#222; padding:15px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+
+<h1>Sportsclusive Admin</h1>
+
+<select id="category">
+  <option>FOOTBALL</option>
+  <option>CRICKET</option>
+</select>
+
+<input id="title" placeholder="Article Title">
+<textarea id="content" placeholder="Write article here (normal text)..."></textarea>
+
+<button onclick="generate()">Generate Article Page</button>
+
+<h3>👇 Copy everything below and save as a new file inside /articles</h3>
+<pre id="output"></pre>
+
+<script>
+function generate() {
+  const title = titleInput.value;
+  const text = content.value.split("\n").map(p => `<p>${p}</p>`).join("");
+
+  output.textContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>${title}</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <h1>${title}</h1>
+</header>
+
+<main>
+  ${text}
+  <br>
+  <a href="../index.html">← Back to Sportsclusive</a>
+</main>
+
+</body>
+</html>`;
+}
+
+const titleInput = document.getElementById("title");
+const content = document.getElementById("content");
+const output = document.getElementById("output");
+</script>
+
+</body>
+</html>
