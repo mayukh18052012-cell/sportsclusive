@@ -1,105 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sportsclusive | Secret Editor</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { background: #000; color: white; padding: 20px; font-family: 'Roboto', sans-serif; }
-        .editor-wrap { max-width: 900px; margin: auto; background: #111; padding: 40px; border-top: 4px solid #ff002b; }
-        input, textarea, select { width: 100%; padding: 15px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 4px; }
-        button { background: #ff002b; color: white; border: none; padding: 20px; width: 100%; cursor: pointer; font-weight: 900; font-size: 1rem; }
-        .status-msg { margin-top: 20px; padding: 10px; display: none; text-align: center; font-weight: bold; }
-    </style>
-</head>
-<body>
+<input type="file" id="imageInput" accept="image/*">
+<img id="preview" style="max-width: 100%; display: none; margin: 10px 0; border: 1px solid #333;">
 
-    <div class="editor-wrap">
-        <h2 style="font-family: 'Oswald'; font-style: italic;">ADMIN CONSOLE</h2>
+<script>
+    const GITHUB_CONFIG = {
+        token: "YOUR_ACTUAL_TOKEN_HERE", // Keep this strictly in this private file
+        owner: "mayukh18052012-cell",
+        repo: "sportsclusive",
+        branch: "main" 
+    };
+
+    // Show image preview
+    document.getElementById('imageInput').onchange = function(e) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const img = document.getElementById('preview');
+            img.src = reader.result;
+            img.style.display = "block";
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    async function sendToGithub() {
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('body').value;
+        const imageFile = document.getElementById('imageInput').files[0];
+        const status = document.getElementById('status');
+
+        if(!title || !content || !imageFile) { alert("Missing title, content, or image!"); return; }
+
+        status.style.display = "block";
+        status.innerText = "Uploading Image and Article...";
+
+        const dateStr = new Date().toISOString().split('T')[0];
+        const slug = title.toLowerCase().replace(/ /g, '-');
         
-        <input type="text" id="title" placeholder="Article Headline (e.g. Messi's 2026 Vision)">
-        
-        <select id="category">
-            <option value="Football">Football</option>
-            <option value="Cricket">Cricket</option>
-            <option value="Womens">Womens (W)</option>
-            <option value="UCL">UCL</option>
-        </select>
+        try {
+            // 1. UPLOAD IMAGE FIRST
+            const imgReader = new FileReader();
+            imgReader.readAsArrayBuffer(imageFile);
+            imgReader.onload = async () => {
+                const imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgReader.result)));
+                const imgPath = `images/uploads/${dateStr}-${slug}.png`;
 
-        <textarea id="body" rows="15" placeholder="Write the story here... You can use HTML like <b>bold</b> or <img> tags."></textarea>
-        
-        <button id="publishBtn" onclick="sendToGithub()">PUBLISH TO SITE</button>
-        <div id="status" class="status-msg"></div>
-    </div>
-
-    <script>
-        // --- CONFIGURATION (FILL THIS OUT ONCE) ---
-        const GITHUB_CONFIG = {
-            token: "YOUR_TOKEN_HERE", // Get this from GitHub Settings -> Developer Settings -> Tokens (Classic)
-            owner: "YOUR_GITHUB_USERNAME",
-            repo: "YOUR_REPO_NAME",
-            branch: "main" 
-        };
-
-        async function sendToGithub() {
-            const btn = document.getElementById('publishBtn');
-            const status = document.getElementById('status');
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('body').value;
-            const cat = document.getElementById('category').value;
-
-            if(!title || !content) { alert("Please fill everything!"); return; }
-
-            btn.disabled = true;
-            btn.innerText = "UPLOADING...";
-            status.style.display = "block";
-            status.innerText = "Syncing with GitHub...";
-
-            // Format: _posts/2026-02-21-headline.md
-            const dateStr = new Date().toISOString().split('T')[0];
-            const fileName = `${dateStr}-${title.toLowerCase().replace(/ /g, '-')}.md`;
-            const path = `_posts/${fileName}`;
-
-            // Create Markdown File content
-            const fileContent = `---
-title: "${title}"
-category: "${cat}"
-date: "${dateStr}"
----
-${content}`;
-
-            // Convert to Base64 (Required by GitHub API)
-            const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
-
-            try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}`, {
+                await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${imgPath}`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_CONFIG.token}`,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
                     body: JSON.stringify({
-                        message: `New Post: ${title}`,
-                        content: base64Content,
-                        branch: GITHUB_CONFIG.branch
+                        message: `Upload image for ${title}`,
+                        content: imgBase64
                     })
                 });
 
-                if (response.ok) {
+                // 2. UPLOAD ARTICLE MARKDOWN
+                const postPath = `_posts/${dateStr}-${slug}.md`;
+                const postContent = `---
+title: "${title}"
+image: "/${imgPath}"
+date: "${dateStr}"
+---
+${content}`;
+                const postBase64 = btoa(unescape(encodeURIComponent(postContent)));
+
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${postPath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
+                    body: JSON.stringify({
+                        message: `New Post: ${title}`,
+                        content: postBase64
+                    })
+                });
+
+                if(res.ok) {
+                    status.innerText = "SUCCESS! Article and Image are live.";
                     status.style.background = "green";
-                    status.innerText = "SUCCESS: Article is live!";
-                    setTimeout(() => location.reload(), 2000);
-                } else {
-                    const data = await response.json();
-                    status.style.background = "red";
-                    status.innerText = "ERROR: " + data.message;
-                    btn.disabled = false;
                 }
-            } catch (err) {
-                status.innerText = "Failed to connect to GitHub.";
-                btn.disabled = false;
-            }
+            };
+        } catch (err) {
+            status.innerText = "Upload failed. Check token permissions.";
         }
-    </script>
-</body>
-</html>
+    }
+</script>
