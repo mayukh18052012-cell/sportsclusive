@@ -1,73 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportsclusive | Global Sports</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
-</head>
-<body>
+:root {
+    --espn-red: #ff002b;
+    --bg-black: #000000;
+    --card-gray: #1a1a1a;
+    --border: #333;
+}
 
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <div class="ticker-item">● T20 WORLD CUP: PAK vs NZ LIVE NOW</div>
-            <div class="ticker-item">● MESSI STARTS FOR INTER MIAMI VS LAFC</div>
-            <div class="ticker-item">● PREMIER LEAGUE: ARSENAL LEAD ASTON VILLA 1-0</div>
-        </div>
-    </div>
+body {
+    margin: 0;
+    background: var(--bg-black);
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+}
 
-    <header>
-        <h1>SPORTSCLUSIVE</h1>
-    </header>
+header {
+    background: #000;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
 
-    <div class="espn-container">
-        
-        <aside class="left-col">
-            <div class="sidebar-box">
-                <h3 class="side-title">Favorites</h3>
-                <ul class="side-links">
-                    <li>🏏 T20 World Cup</li>
-                    <li>⚽ Inter Miami</li>
-                    <li>⚽ Premier League</li>
-                    <li>🏏 Indian Team</li>
-                </ul>
-            </div>
-        </aside>
+header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.2rem;
+    margin: 0;
+    font-style: italic;
+    color: white;
+}
 
-        <main class="main-col">
-            <h2 class="section-title">Match Center</h2>
-            <div class="match-card main-widget">
-                <script src="https://cdorgapi.b-cdn.net/widgets/score.js"></script>
-            </div>
+/* --- THE SWIPEABLE CAROUSEL --- */
+.score-carousel {
+    background: #111;
+    border-bottom: 2px solid var(--espn-red);
+    padding: 10px 0;
+    overflow-x: auto; /* This enables swiping */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
 
-            <div class="match-card main-widget">
-                <div id="scoreaxis-widget-all" data-widget="scoreaxis-live-list" data-leagues="all" data-theme="dark"></div>
-                <script src="https://www.scoreaxis.com/widget/common.js"></script>
-            </div>
-        </main>
+/* Hide scrollbar for clean look */
+.score-carousel::-webkit-scrollbar { display: none; }
 
-        <aside class="right-col">
-            <div class="sidebar-box">
-                <h3 class="side-title">Star of the Day</h3>
-                <div class="potm-mini">
-                    <div class="potm-badge">POTM</div>
-                    <h4>Lionel Messi</h4>
-                    <p>Dominating the 2026 MLS opener.</p>
-                </div>
-            </div>
-            
-            <div class="sidebar-box" style="margin-top: 20px;">
-                <h3 class="side-title">Top Headlines</h3>
-                <ul class="news-list">
-                    <li>Hardik Pandya fit for Super 8s</li>
-                    <li>Mbappe transfer rumors heat up</li>
-                    <li>Kohli 2.0: The T20 Masterclass</li>
-                </ul>
-            </div>
-        </aside>
+.carousel-track {
+    display: flex;
+    padding-left: 15px;
+}
 
-    </div>
+.capsule {
+    min-width: 140px;
+    background: var(--card-gray);
+    border-right: 1px solid var(--border);
+    padding: 8px 15px;
+    margin-right: 2px;
+    flex-shrink: 0;
+}
 
-</body>
-</html>
+.league-name {
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.match-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 900;
+    margin: 2px 0;
+}
+
+.score-val {
+    color: #fff;
+}
+
+.status {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #666;
+    margin-top: 5px;
+}
+
+.status.live {
+    color: var(--espn-red);
+}
+
+/* --- MAIN LAYOUT --- */
+.espn-grid {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.section-title {
+    font-family: 'Oswald', sans-serif;
+    border-left: 4px solid var(--espn-red);
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+.auto-card {
+    background: var(--card-gray);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 10px;
+}
