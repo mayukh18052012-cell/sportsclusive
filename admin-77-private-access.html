@@ -2,61 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sportsclusive | Secret Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>Admin Hub | Sportsclusive</title>
     <style>
-        :root { --red: #ff002b; --bg: #0b0b0b; }
-        body { background: var(--bg); color: white; font-family: 'Roboto Condensed', sans-serif; padding: 20px; }
-        .admin-card { max-width: 600px; margin: 40px auto; background: #111; padding: 30px; border-top: 5px solid var(--red); border-radius: 8px; }
-        h2 { font-family: 'Oswald'; font-style: italic; }
-        label { display: block; margin: 15px 0 5px; font-size: 0.75rem; color: #888; }
-        input, textarea { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 4px; box-sizing: border-box; }
-        button { background: var(--red); color: white; border: none; padding: 18px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 20px; }
-        #status { margin-top: 15px; text-align: center; padding: 10px; display: none; border-radius: 4px; }
+        body { background: #0e0f11; color: white; font-family: sans-serif; padding: 50px; }
+        .box { max-width: 600px; margin: auto; background: #1b1c1e; padding: 30px; border-radius: 8px; border-top: 4px solid #00d278; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; }
+        button { background: #00d278; color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        #log { margin-top: 15px; font-size: 0.8rem; text-align: center; color: #888; }
     </style>
 </head>
 <body>
-<div class="admin-card">
-    <h2>CREATE TRENDING ARTICLE</h2>
-    <label>ARTICLE TITLE</label>
-    <input type="text" id="title" placeholder="Headline...">
-    <label>IMAGE</label>
-    <input type="file" id="imageInput" accept="image/*">
-    <label>STORY</label>
-    <textarea id="body" rows="10" placeholder="Full report..."></textarea>
-    <button id="pubBtn" onclick="handlePublish()">PUBLISH TO GITHUB</button>
-    <div id="status"></div>
-</div>
-<script>
-    const CONFIG = { token: "YOUR_GITHUB_TOKEN", owner: "mayukh18052012-cell", repo: "sportsclusive" };
-    async function handlePublish() {
-        const title = document.getElementById('title').value;
-        const body = document.getElementById('body').value;
-        const imgFile = document.getElementById('imageInput').files[0];
-        const stat = document.getElementById('status');
-        if(!title || !imgFile) return alert("Fill all fields!");
-        stat.style.display = "block"; stat.innerText = "Syncing...";
-        const slug = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        const date = new Date().toISOString().split('T')[0];
-        try {
-            const imgBase64 = (await toBase64(imgFile)).split(',')[1];
-            await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/images/uploads/${date}-${slug}.png`, {
-                method: 'PUT', headers: { 'Authorization': `token ${CONFIG.token}` },
-                body: JSON.stringify({ message: "img", content: imgBase64 })
-            });
-            const postContent = `---\ntitle: "${title}"\nimage: "images/uploads/${date}-${slug}.png"\ndate: "${date}"\n---\n${body}`;
-            await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/_posts/${date}-${slug}.md`, {
-                method: 'PUT', headers: { 'Authorization': `token ${CONFIG.token}` },
-                body: JSON.stringify({ message: "post", content: btoa(unescape(encodeURIComponent(postContent))) })
-            });
-            stat.style.background = "green"; stat.innerText = "LIVE!";
-            setTimeout(() => location.reload(), 2000);
-        } catch (e) { stat.style.background = "red"; stat.innerText = "Error! Check Token."; }
-    }
-    const toBase64 = file => new Promise((res, rej) => {
-        const r = new FileReader(); r.readAsDataURL(file);
-        r.onload = () => res(r.result);
-    });
-</script>
+    <div class="box">
+        <h2 style="margin-top:0">EXCLUSIVE POSTER</h2>
+        <input type="text" id="t" placeholder="Headline">
+        <input type="file" id="i" accept="image/*">
+        <textarea id="b" rows="8" placeholder="Article body..."></textarea>
+        <button onclick="post()">PUBLISH EXCLUSIVE</button>
+        <div id="log">Ready to sync with GitHub...</div>
+    </div>
+
+    <script>
+        const CFG = { token: "YOUR_GITHUB_TOKEN", owner: "mayukh18052012-cell", repo: "sportsclusive" };
+
+        async function post() {
+            const title = document.getElementById('t').value;
+            const body = document.getElementById('b').value;
+            const file = document.getElementById('i').files[0];
+            const log = document.getElementById('log');
+
+            if(!title || !file) return alert("Missing data");
+            log.innerText = "Processing...";
+
+            const slug = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            const date = new Date().toISOString().split('T')[0];
+
+            try {
+                // Upload Image
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    const imgB64 = reader.result.split(',')[1];
+                    await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/images/uploads/${date}-${slug}.png`, {
+                        method: 'PUT', headers: { 'Authorization': `token ${CFG.token}` },
+                        body: JSON.stringify({ message: "img", content: imgB64 })
+                    });
+
+                    // Upload Post
+                    const postMD = `---\ntitle: "${title}"\nimage: "images/uploads/${date}-${slug}.png"\ndate: "${date}"\n---\n${body}`;
+                    await fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/_posts/${date}-${slug}.md`, {
+                        method: 'PUT', headers: { 'Authorization': `token ${CFG.token}` },
+                        body: JSON.stringify({ message: "post", content: btoa(unescape(encodeURIComponent(postMD))) })
+                    });
+                    log.innerText = "SUCCESS! Article is live.";
+                };
+            } catch (e) { log.innerText = "Error: Check Console/Token"; }
+        }
+    </script>
 </body>
 </html>
